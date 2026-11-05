@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}{% if summary %}Resumo do pedido{% else %}Finalizar pedido{% endif %} · Cafeteria{% endblock %}
+{% block content %}
+{% if summary %}
+<section class="panel">
+  <h1>Resumo do pedido</h1>
+  <dl class="receipt">
+    <div>
+      <dt>Café</dt>
+      <dd>{{ summary.coffee }}</dd>
+    </div>
+    <div>
+      <dt>Preço</dt>
+      <dd>{{ summary.price }}</dd>
+    </div>
+    <div>
+      <dt>Nome no copo</dt>
+      <dd>{{ summary.cup_name }}</dd>
+    </div>
+    <div>
+      <dt>Pagamento</dt>
+      <dd>{{ summary.payment }}</dd>
+    </div>
+  </dl>
+  <form method="post" action="{{ url_for('confirmar_pedido') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <button type="submit" class="btn">Confirmar pedido</button>
+  </form>
+  <p class="switch"><a href="{{ url_for('pedido', cafe=summary.coffee) }}">Alterar pedido</a></p>
+</section>
+{% else %}
+<section class="panel">
+  <h1>Finalizar pedido</h1>
+  <form method="post" action="{{ url_for('pedido_revisar') }}" data-validate>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <label>
+      Sabor do café
+      <select name="coffee" required>
+        <option value="" disabled {% if not selected %}selected{% endif %}>Selecione</option>
+        {% for coffee in coffees %}
+          <option value="{{ coffee.name }}" {% if coffee.name == selected %}selected{% endif %}>
+            {{ coffee.name }} — {{ coffee.price_label }}
+          </option>
+        {% endfor %}
+      </select>
+    </label>
+    <label>
+      Nome no copo
+      <input type="text" name="cup_name" required minlength="2" maxlength="30" value="{{ cup_name }}">
+    </label>
+    <fieldset>
+      <legend>Forma de pagamento</legend>
+      {% for method in payments %}
+        <label class="radio">
+          <input type="radio" name="payment" value="{{ method }}" {% if method == payment %}checked{% endif %} required>
+          <span>{{ method }}</span>
+        </label>
+      {% endfor %}
+    </fieldset>
+    <button type="submit" class="btn">Revisar pedido</button>
+  </form>
+</section>
+{% endif %}
+{% endblock %}

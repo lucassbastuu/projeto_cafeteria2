@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Cardápio · Cafeteria{% endblock %}
+{% block content %}
+<section class="page-head">
+  <h1>Cardápio</h1>
+  <p>Escolha um café e peça em poucos toques.</p>
+</section>
+<ul class="menu">
+  {% for coffee in coffees %}
+    <li class="coffee-card">
+      <h2>{{ coffee.name }}</h2>
+      <p>{{ coffee.description }}</p>
+      <p class="price">{{ coffee.price_label }}</p>
+      <a class="btn" href="{{ url_for('pedido', cafe=coffee.name) }}">Pedir</a>
+    </li>
+  {% endfor %}
+</ul>
+{% endblock %}

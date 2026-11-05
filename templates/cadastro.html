@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Cadastro · Cafeteria{% endblock %}
+{% block content %}
+<section class="panel">
+  <h1>Criar conta</h1>
+  <form method="post" action="{{ url_for('cadastro') }}" data-validate>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <label>
+      Nome completo
+      <input type="text" name="name" required minlength="2" maxlength="80" value="{{ form.name }}" autocomplete="name">
+    </label>
+    <label>
+      E-mail
+      <input type="email" name="email" required maxlength="254" value="{{ form.email }}" autocomplete="email">
+    </label>
+    <label>
+      Senha
+      <input type="password" name="password" required minlength="8" maxlength="128" autocomplete="new-password">
+    </label>
+    <label>
+      Confirmar senha
+      <input type="password" name="password_confirm" required minlength="8" maxlength="128" autocomplete="new-password">
+    </label>
+    <button type="submit" class="btn">Cadastrar</button>
+  </form>
+  <p class="switch">Já tem conta? <a href="{{ url_for('login') }}">Entrar</a></p>
+</section>
+{% endblock %}

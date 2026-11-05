@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Histórico · Cafeteria{% endblock %}
+{% block content %}
+<section class="page-head">
+  <h1>Histórico</h1>
+  <p>Seus pedidos, do mais recente ao mais antigo.</p>
+</section>
+{% if orders %}
+  <ul class="orders">
+    {% for order in orders %}
+      <li class="order-card">
+        <div class="order-top">
+          <h2>{{ order.cup_name }}</h2>
+          <span class="status">{{ order.status }}</span>
+        </div>
+        <p>{{ order.coffee }}</p>
+        <p class="muted">{{ order.payment }}</p>
+        <time>{{ order.created_at }}</time>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <section class="panel empty">
+    <p>Você ainda não fez nenhum pedido.</p>
+    <a class="btn" href="{{ url_for('index') }}">Ver cardápio</a>
+  </section>
+{% endif %}
+{% endblock %}
